@@ -21,6 +21,6 @@ app.use(authJWT.initialize());
 registerHandlers(app, authsvc, authJWT);
 
 // Serve
-app.listen(process.env.PORT, () => {
-  console.log(`Running on port ${process.env.PORT}`);
+app.listen(process.env.CONTROLLER_PORT, () => {
+  console.log(`Running on port ${process.env.CONTROLLER_PORT}`);
 });
