@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import { ServiceBroker } from 'moleculer';
 import { Express, Request, Response } from 'express';
-import molecularConfig from '../../../molecular.config';
+import molecularConfig from '../../../moleculer.config';
 import { authJWT } from '../middleware/auth';
 
 const broker = new ServiceBroker(molecularConfig);
@@ -43,7 +43,8 @@ const update = () => async (req: Request, res: Response) => {
   }
 };
 
-const registerHandlers = (app: Express, JWT: authJWT) => {
+const registerHandlers = async (app: Express, JWT: authJWT) => {
+  await broker.start();
   app.get('/list', JWT.authenticate(), fetch());
   app.post('/update', JWT.authenticate(), update());
   app.post('/register', JWT.authenticate(), register());
