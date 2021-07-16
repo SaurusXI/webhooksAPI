@@ -17,7 +17,6 @@ class AuthService {
   }
 
   validate(uid: string) {
-    console.log(uid);
     if (uid === this.adminId) {
       return true;
     }
