@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(authJWT.initialize());
 
 // Register routes
-registerHandlers(app, authsvc);
+registerHandlers(app, authsvc, authJWT);
 
 // Serve
 app.listen(process.env.PORT, () => {
