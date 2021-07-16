@@ -10,6 +10,7 @@ const ModelService = {
       id,
       url,
     });
+    return id;
   },
 
   async updateURLForID(id: string, newUrl: string) {
@@ -29,7 +30,10 @@ const ModelService = {
   async listAllURLsByID() {
     await db.sync();
     const queryResult = await URL.findAll();
-    const result = queryResult.map((row) => [row.getDataValue('id'), row.getDataValue('url')]);
+    const result = queryResult.map((row) => ({
+      id: row.getDataValue('id'),
+      url: row.getDataValue('url'),
+    }));
     return result;
   },
 
