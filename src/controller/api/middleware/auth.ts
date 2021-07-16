@@ -1,4 +1,5 @@
 /* eslint-disable import/extensions */
+import e from 'express';
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
 
@@ -35,4 +36,9 @@ const authMiddleware = (authsvc: AuthService) => {
   };
 };
 
-export { authMiddleware as default };
+interface authJWT {
+  initialize(): e.Handler,
+  authenticate(): any,
+}
+
+export { authJWT, authMiddleware as default };
