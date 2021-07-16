@@ -1,17 +1,18 @@
 /* eslint-disable import/extensions */
 import { Express, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import AuthService from '../../pkg/auth/service';
 
 const login = (authsvc: AuthService) => (req: Request, res: Response) => {
   const { username } = req.body;
   const { password } = req.body;
-  const token = authsvc.authenticate(username, password);
+  const uuid = authsvc.authenticate(username, password);
 
+  const jwtPayload = { id: uuid };
+  const token = jwt.sign(jwtPayload, process.env.JWTSECRET as string);
   if (token === null) {
-    console.log('Login failure');
     res.sendStatus(401);
   } else {
-    console.log('Login success');
     res.json({
       token,
     });

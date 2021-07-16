@@ -6,9 +6,9 @@ import AuthService from '../../pkg/auth/service';
 import registerAuthHandlers from './auth';
 import registerWebhooksHandlers from './webhooks';
 
-const registerHandlers = (app: Express, authsvc: AuthService, JWT: authJWT) => {
+const registerHandlers = async (app: Express, authsvc: AuthService, JWT: authJWT) => {
   registerAuthHandlers(app, authsvc);
-  registerWebhooksHandlers(app, JWT);
+  await registerWebhooksHandlers(app, JWT);
 };
 
 export { registerHandlers as default };
