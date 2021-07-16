@@ -3,7 +3,7 @@ import modelsvc from '../pkg/model/service';
 
 const webhooksMicroservice = {
   name: 'webhooks',
-  methods: {
+  actions: {
     async register(targetUrl: string) {
       return modelsvc.registerURL(targetUrl);
     },
