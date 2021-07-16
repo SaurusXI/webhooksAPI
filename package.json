@@ -5,8 +5,9 @@
   "main": "dist/controller/api/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc -b && node dist/controller/api/server.js",
-    "controller": "export $(cat sample.env | xargs) && npm start"
+    "build": "tsc -b",
+    "wh-microservice": "export $(cat sample.env | xargs) && npm run build && moleculer-runner -c dist/moleculer.config.js dist/webhooks/services",
+    "controller": "export $(cat sample.env | xargs) && npm run build && node dist/controller/api/server.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/ioredis": "^4.26.6",
+    "@types/jsonwebtoken": "^8.5.4",
     "@types/passport": "^1.0.7",
     "@types/passport-jwt": "^3.0.6",
     "@types/sequelize": "^4.28.10",
@@ -37,6 +39,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "ioredis": "^4.27.6",
+    "jsonwebtoken": "^8.5.1",
     "moleculer": "^0.14.15",
     "moleculer-db": "^0.8.14",
     "moleculer-web": "^0.10.0",
