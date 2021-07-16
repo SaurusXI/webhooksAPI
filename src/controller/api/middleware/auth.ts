@@ -1,5 +1,8 @@
+/* eslint-disable import/extensions */
 import passport from 'passport';
 import passportJWT from 'passport-jwt';
+
+import AuthService from '../../pkg/auth/service';
 
 const { Strategy } = passportJWT;
 const { ExtractJwt } = passportJWT;
@@ -13,9 +16,9 @@ const sessionParams = {
   session: false,
 };
 
-const authMiddleware = () => {
+const authMiddleware = (authsvc: AuthService) => {
   const strategy = new Strategy(params, async (payload, done) => {
-    const validUser = true;
+    const validUser = authsvc.validate(payload.id);
     if (validUser) {
       return done(null, {
         id: payload.id,
