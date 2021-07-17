@@ -9,8 +9,9 @@ API Implementation -
 - [X]  `GET /update` - takes `newTargetUrl` and `id` parameters, updates url at ID
 - [X]  `POST /ip` - takes `ipAddress` in request body JSON, triggers webhooks and sends `{ ipAddress, timestamp: UNIX timestamp }` to all URLs. Parallelizes queries (currently in batches of 5)
 <br>
+
 Bonus tasks -
-- [X] Perform 5 max retries if any webhook returns a non-success response
+- [X] Perform 5 max retries if any webhook returns a non-success response code
 - [X] Dockerize
 
 <br>
@@ -41,9 +42,11 @@ cp sample.env config.env
 ```bash
 docker-compose --env-file config.env up
 ```
-<br>
-- Remember to call `POST /login` with whatever credentials you used to get a JWT token.
-- Example using `sample.env` for credentials -
+
+Once the API is online
+- Remember to call `POST /login` with whatever credentials you saved in `config.env` (values of `USER` and `PASS` variables) to get a JWT token.
+- Example request on the `POST /login` route using `sample.env` for credentials -
+
 ```bash
 curl --location --request POST 'localhost:3000/login' \
 --header 'Content-Type: application/json' \
