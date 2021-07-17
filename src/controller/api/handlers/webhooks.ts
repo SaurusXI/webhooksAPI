@@ -43,11 +43,23 @@ const update = () => async (req: Request, res: Response) => {
   }
 };
 
+const trigger = () => async (req: Request, res: Response) => {
+  const params = {
+    ipAdress: req.body.ipAddress,
+  };
+  await broker.call('webhooks.trigger', params);
+
+  res.json({
+    msg: 'Webhooks triggered',
+  });
+};
+
 const registerHandlers = async (app: Express, JWT: authJWT) => {
   await broker.start();
   app.get('/list', JWT.authenticate(), fetch());
   app.post('/update', JWT.authenticate(), update());
   app.post('/register', JWT.authenticate(), register());
+  app.post('/trigger', JWT.authenticate(), trigger());
 };
 
 export { registerHandlers as default };
