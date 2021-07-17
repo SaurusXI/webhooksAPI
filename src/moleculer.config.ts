@@ -1,9 +1,9 @@
 const molecularConfig = {
-  transporter: `redis://localhost:${process.env.REDIS_PORT}`,
+  transporter: `redis://redis:${process.env.REDIS_PORT}`,
   namespace: '',
   serializer: 'JSON',
   registry: {
-    discoverer: `redis://localhost:${process.env.REDIS_PORT}`,
+    discoverer: `redis://redis:${process.env.REDIS_PORT}`,
   },
 };
 
