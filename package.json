@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -b",
     "wh-microservice": "export $(cat sample.env | xargs) && npm run build && moleculer-runner -c dist/moleculer.config.js dist/webhooks/services",
-    "controller": "export $(cat sample.env | xargs) && npm run build && node dist/controller/api/server.js"
+    "gateway": "export $(cat sample.env | xargs) && npm run build && node dist/controller/api/server.js"
   },
   "repository": {
     "type": "git",
