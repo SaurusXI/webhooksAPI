@@ -43,7 +43,7 @@ const ModelService = {
       attributes: ['url'],
     });
     const result = queryResult.map((row) => row.getDataValue('url'));
-    return result;
+    return result as string[];
   },
 };
 
