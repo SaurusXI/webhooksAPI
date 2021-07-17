@@ -1,6 +1,7 @@
 /* eslint-disable import/extensions */
 import { Context } from 'moleculer';
 import modelsvc from '../pkg/model/service';
+import messagesvc from '../pkg/message/service';
 
 const webhooksMicroservice = {
   name: 'webhooks',
@@ -15,6 +16,10 @@ const webhooksMicroservice = {
 
     async list() {
       return modelsvc.listAllURLsByID();
+    },
+
+    async trigger(ctx: Context<{ipAddress: string}, {}>) {
+      await messagesvc.sendMessages(ctx.params.ipAddress, 5);
     },
   },
 };
