@@ -57,7 +57,7 @@ curl --location --request POST 'localhost:3000/login' \
 ```
 <br>
 
-- Use `response.token` as Bearer token for authorization when making requests to any other routes of the API.
+- Use `response.token` as Bearer token in authorization header when making requests to any other routes of the API.
 
 ## License
 MIT
