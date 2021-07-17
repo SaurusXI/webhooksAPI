@@ -1,11 +1,7 @@
 /* eslint-disable import/extensions */
-import { ServiceBroker } from 'moleculer';
 import { Express, Request, Response } from 'express';
-import molecularConfig from '../../../moleculer.config';
 import RPCService from '../../pkg/rpc/service';
 import { authJWT } from '../middleware/auth';
-
-const broker = new ServiceBroker(molecularConfig);
 
 const fetch = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
   const result = await rpcsvc.fetch();
@@ -15,9 +11,14 @@ const fetch = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
 };
 
 const register = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const url = req.body.targeturl;
+  const url = req.query.targetUrl;
+  if (typeof url !== 'string') {
+    res.status(400).json({
+      msg: 'Malformed request',
+    });
+  }
 
-  const result = await rpcsvc.register(url);
+  const result = await rpcsvc.register(url as string);
 
   res.json({
     id: result,
@@ -25,10 +26,16 @@ const register = (rpcsvc: RPCService) => async (req: Request, res: Response) => 
 };
 
 const update = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const newUrl = req.body.targeturl;
-  const urlId = req.body.id;
+  const newUrl = req.query.newTargetUrl;
+  const urlId = req.query.id;
 
-  const updated = await rpcsvc.update(newUrl, urlId);
+  if (typeof newUrl !== 'string' || typeof urlId !== 'string') {
+    res.status(400).json({
+      msg: 'Malformed request',
+    });
+  }
+
+  const updated = await rpcsvc.update(newUrl as string, urlId as string);
 
   if (!updated) {
     res.status(400).json({
@@ -49,11 +56,10 @@ const trigger = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
 };
 
 const registerHandlers = async (app: Express, JWT: authJWT, rpcsvc: RPCService) => {
-  await broker.start();
   app.get('/list', JWT.authenticate(), fetch(rpcsvc));
-  app.post('/update', JWT.authenticate(), update(rpcsvc));
-  app.post('/register', JWT.authenticate(), register(rpcsvc));
-  app.post('/trigger', JWT.authenticate(), trigger(rpcsvc));
+  app.get('/update', JWT.authenticate(), update(rpcsvc));
+  app.get('/register', JWT.authenticate(), register(rpcsvc));
+  app.post('/ip', JWT.authenticate(), trigger(rpcsvc));
 };
 
 export { registerHandlers as default };
