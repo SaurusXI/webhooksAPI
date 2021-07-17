@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -b",
-    "wh-microservice": "export $(cat sample.env | xargs) && npm run build && moleculer-runner -c dist/moleculer.config.js dist/webhooks/services",
-    "gateway": "export $(cat sample.env | xargs) && npm run build && node dist/gateway/api/server.js"
+    "wh-microservice": "export $(cat config.env | xargs) && npm run build && moleculer-runner -c dist/moleculer.config.js dist/webhooks/services",
+    "gateway": "export $(cat config.env | xargs) && npm run build && node dist/gateway/api/server.js"
   },
   "repository": {
     "type": "git",
