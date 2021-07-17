@@ -7,13 +7,15 @@ interface params {
   retries: number,
 }
 
+const getLinuxTimestamp = () => Math.round((new Date()).getTime() / 1000);
+
 const MessageService = {
   async sendMessagesRunner(msg: string, requestParams: params[]) {
     const requests = requestParams.map((requestParam) => () => axios.post(
       requestParam.url,
       {
         ipAddress: msg,
-        timestamp: new Date().toISOString(),
+        timestamp: getLinuxTimestamp(),
       },
     ));
 

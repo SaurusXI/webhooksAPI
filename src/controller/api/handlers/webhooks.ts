@@ -37,9 +37,13 @@ const update = () => async (req: Request, res: Response) => {
   const updated = await broker.call('webhooks.update', params);
 
   if (!updated) {
-    res.status(400).send('Webhook ID not found');
+    res.status(400).json({
+      msg: 'Webhook ID not found',
+    });
   } else {
-    res.status(200).send('Webhook updated');
+    res.status(200).json({
+      msg: 'Webhook updated',
+    });
   }
 };
 
@@ -47,7 +51,7 @@ const trigger = () => async (req: Request, res: Response) => {
   const params = {
     ipAdress: req.body.ipAddress,
   };
-  await broker.call('webhooks.trigger', params);
+  broker.call('webhooks.trigger', params);
 
   res.json({
     msg: 'Webhooks triggered',
