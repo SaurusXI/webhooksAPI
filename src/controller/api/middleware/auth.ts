@@ -25,7 +25,7 @@ const authMiddleware = (authsvc: AuthService) => {
         id: payload.id,
       });
     }
-    return done(new Error('User not found'), null);
+    return done(null, false);
   });
 
   passport.use(strategy);
