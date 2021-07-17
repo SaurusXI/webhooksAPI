@@ -20,7 +20,11 @@ const MessageService = {
     ));
 
     const responses = await Promise.all(
-      requests.map((requester) => requester()),
+      requests.map((requester) => requester()).map(
+        // Promise rejection indicates an unsuccessful request, which is handled later
+        // So we just bypass any promise rejections
+        (p) => p.catch((e) => e),
+      ),
     );
 
     const out = [];
