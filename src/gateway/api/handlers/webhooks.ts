@@ -11,7 +11,7 @@ const fetch = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
 };
 
 const register = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const url = req.query.targetUrl;
+  const url = req.body.targetUrl;
   if (typeof url !== 'string') {
     res.status(400).json({
       msg: 'Malformed request',
@@ -26,8 +26,8 @@ const register = (rpcsvc: RPCService) => async (req: Request, res: Response) => 
 };
 
 const update = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const newUrl = req.query.newTargetUrl;
-  const urlId = req.query.id;
+  const newUrl = req.body.newTargetUrl;
+  const urlId = req.body.id;
 
   if (typeof newUrl !== 'string' || typeof urlId !== 'string') {
     res.status(400).json({
@@ -49,13 +49,8 @@ const update = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
 };
 
 const trigger = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const { ipAddress } = req.body;
-  if (typeof ipAddress !== 'string') {
-    res.status(400).json({
-      msg: 'malformed request',
-    });
-  }
-  rpcsvc.trigger(req.body.ipAddress);
+  const { body } = req;
+  rpcsvc.trigger(body);
   res.json({
     msg: 'Webhooks triggered',
   });
@@ -63,9 +58,9 @@ const trigger = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
 
 const registerHandlers = async (app: Express, JWT: authJWT, rpcsvc: RPCService) => {
   app.get('/list', JWT.authenticate(), fetch(rpcsvc));
-  app.get('/update', JWT.authenticate(), update(rpcsvc));
-  app.get('/register', JWT.authenticate(), register(rpcsvc));
-  app.get('/ip', JWT.authenticate(), trigger(rpcsvc));
+  app.patch('/webhook', JWT.authenticate(), update(rpcsvc));
+  app.post('/webhook', JWT.authenticate(), register(rpcsvc));
+  app.get('/trigger', JWT.authenticate(), trigger(rpcsvc));
 };
 
 export { registerHandlers as default };

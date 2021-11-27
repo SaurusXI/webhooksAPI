@@ -10,11 +10,11 @@ interface params {
 const getLinuxTimestamp = () => Math.round((new Date()).getTime() / 1000);
 
 const MessageService = {
-  async sendMessagesRunner(msg: string, requestParams: params[]) {
+  async sendMessagesRunner(msg: any, requestParams: params[]) {
     const requests = requestParams.map((requestParam) => () => axios.post(
       requestParam.url,
       {
-        ipAddress: msg,
+        msg,
         timestamp: getLinuxTimestamp(),
       },
     ));
@@ -41,7 +41,7 @@ const MessageService = {
     return out;
   },
 
-  async sendMessages(msg: string, batchSize: number) {
+  async sendMessages(msg: any, batchSize: number) {
     const urls = await modelsvc.listAllURLs();
     let requestParams: params[] = urls.map((url) => ({
       url,

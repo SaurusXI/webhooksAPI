@@ -4,13 +4,15 @@ Backend with a Webhooks microservice using Molecular and Express. Placement task
 
 ## Problem Description
 API Implementation -
+- [X]  `POST /auth/register` - Register a new user
+- [X]  `POST /auth/login` - Login as a user
 - [X]  `GET /list` - Return all registered webhooks with their IDs
-- [X]  `GET /register` - takes `targetUrl` parameter, registers and returns ID
-- [X]  `GET /update` - takes `newTargetUrl` and `id` parameters, updates url at ID
-- [X]  `POST /ip` - takes `ipAddress` in request body JSON, triggers webhooks and sends `{ ipAddress, timestamp: UNIX timestamp }` to all URLs. Parallelizes queries (currently in batches of 5)
+- [X]  `POST /webhook` - takes `targetUrl` in body, registers and returns ID
+- [X]  `PATCH /webhook` - takes `newTargetUrl` and `id` in body, updates url at ID
+- [X]  `GET /trigger` - takes a generic request body JSON, triggers webhooks and sends `{ msg: request_body, timestamp: UNIX timestamp }` to all URLs. Parallelizes queries (currently in batches of 5)
 <br>
 
-Bonus tasks -
+<!-- Bonus tasks - -->
 - [X] Perform 5 max retries if any webhook returns a non-success response code
 - [X] Dockerize
 
@@ -43,7 +45,7 @@ cp sample.env config.env
 docker-compose --env-file config.env up
 ```
 
-Once the API is online
+<!-- Once the API is online
 - Remember to call `POST /login` with whatever credentials you saved in `config.env` (values of `USER` and `PASS` variables) to get a JWT token.
 - Example request on the `POST /login` route using `sample.env` for credentials -
 
@@ -55,7 +57,7 @@ curl --location --request POST 'localhost:3000/login' \
     "password": "adminpass"
 }'
 ```
-<br>
+<br> -->
 
 - Use `response.token` as Bearer token in authorization header when making requests to any other routes of the API.
 
