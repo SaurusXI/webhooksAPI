@@ -1,4 +1,5 @@
 import { ServiceBroker } from 'moleculer';
+// eslint-disable-next-line import/extensions
 import moleculerConfig from '../../../moleculer.config';
 
 class RPCService {
@@ -28,9 +29,9 @@ class RPCService {
     return this.broker.call('webhooks.update', params);
   }
 
-  async trigger(ipAddress: string) {
+  async trigger(body: any) {
     const params = {
-      ipAddress,
+      body,
     };
     return this.broker.call('webhooks.trigger', params);
   }

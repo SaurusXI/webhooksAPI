@@ -18,8 +18,8 @@ const webhooksMicroservice = {
       return modelsvc.listAllURLsByID();
     },
 
-    async trigger(ctx: Context<{ipAddress: string}, {}>) {
-      await messagesvc.sendMessages(ctx.params.ipAddress, 5);
+    async trigger(ctx: Context<{body: any}, {}>) {
+      await messagesvc.sendMessages(ctx.params.body, 5);
     },
   },
 };

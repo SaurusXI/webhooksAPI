@@ -43,8 +43,8 @@ const login = (authsvc: AuthService) => (req: Request, res: Response) => {
 };
 
 const registerHandlers = (app: Express, authsvc: AuthService) => {
-  app.post('/register', register(authsvc));
-  app.post('/login', login(authsvc));
+  app.post('/auth/register', register(authsvc));
+  app.post('/auth/login', login(authsvc));
 };
 
 export { registerHandlers as default };
