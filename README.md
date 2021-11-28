@@ -9,6 +9,7 @@ API Implementation -
 - [X]  `GET /list` - Return all registered webhooks with their IDs
 - [X]  `POST /webhook` - takes `targetUrl` in body, registers and returns ID
 - [X]  `PATCH /webhook` - takes `newTargetUrl` and `id` in body, updates url at ID
+- [X]  `DELETE /webhook` takes `id` as query parameter, deletes webhook at that ID
 - [X]  `GET /trigger` - takes a generic request body JSON, triggers webhooks and sends `{ msg: request_body, timestamp: UNIX timestamp }` to all URLs. Parallelizes queries (currently in batches of 5)
 <br>
 
