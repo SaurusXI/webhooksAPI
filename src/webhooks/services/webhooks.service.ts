@@ -18,6 +18,10 @@ const webhooksMicroservice = {
       return modelsvc.listAllURLsByID();
     },
 
+    async delete(ctx: Context<{id: string}, {}>) {
+      return modelsvc.deleteURLByID(ctx.params.id);
+    },
+
     async trigger(ctx: Context<{body: any}, {}>) {
       await messagesvc.sendMessages(ctx.params.body, 5);
     },

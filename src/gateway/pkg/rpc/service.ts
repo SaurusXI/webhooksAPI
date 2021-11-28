@@ -35,6 +35,13 @@ class RPCService {
     };
     return this.broker.call('webhooks.trigger', params);
   }
+
+  async delete(id: string) {
+    const params = {
+      id,
+    };
+    return this.broker.call('webhooks.delete', params);
+  }
 }
 
 export { RPCService as default };
