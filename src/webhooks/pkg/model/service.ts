@@ -45,6 +45,15 @@ const ModelService = {
     const result = queryResult.map((row) => row.getDataValue('url'));
     return result as string[];
   },
+
+  async deleteURLByID(id: string) {
+    await db.sync();
+    await URL.destroy({
+      where: {
+        id,
+      },
+    });
+  },
 };
 
 export { ModelService as default };
