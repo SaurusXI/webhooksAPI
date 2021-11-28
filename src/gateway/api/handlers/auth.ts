@@ -1,6 +1,7 @@
 /* eslint-disable import/extensions */
 import { Express, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
+import { Errors as MoleculerErrors } from 'moleculer';
 import AuthService from '../../pkg/auth/service';
 
 const register = (authsvc: AuthService) => (req: Request, res: Response) => {
@@ -26,6 +27,11 @@ const register = (authsvc: AuthService) => (req: Request, res: Response) => {
       });
     }
   } catch (err) {
+    if (err instanceof MoleculerErrors.MoleculerError && err.code === 400) {
+      res.status(400).json({
+        msg: 'User already registered',
+      });
+    }
     res.status(500).json({
       msg: 'Internal server error',
     });

@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { Errors as MoleculerErrors } from 'moleculer';
 
 class AuthService {
   // Admin ID changes every time server is restarted, so token will keep changing
@@ -30,6 +31,9 @@ class AuthService {
 
   register(username: string, password: string) {
     const id = uuidv4();
+    if (this.checkValidUserName(username) !== null) {
+      throw new MoleculerErrors.MoleculerError('User already registered', 400);
+    }
     this.users.push({ username, password, id });
     return id;
   }
