@@ -4,56 +4,80 @@ import RPCService from '../../pkg/rpc/service';
 import { authJWT } from '../middleware/auth';
 
 const fetch = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const result = await rpcsvc.fetch();
-  res.json({
-    urls: result,
-  });
+  try {
+    const result = await rpcsvc.fetch();
+    res.json({
+      urls: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      msg: 'Internal server error',
+    });
+  }
 };
 
 const register = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const url = req.body.targetUrl;
-  if (typeof url !== 'string') {
-    res.status(400).json({
-      msg: 'Malformed request',
+  try {
+    const url = req.body.targetUrl;
+    if (typeof url !== 'string') {
+      res.status(400).json({
+        msg: 'Malformed request',
+      });
+    }
+
+    const result = await rpcsvc.register(url as string);
+
+    res.json({
+      id: result,
+    });
+  } catch (err) {
+    res.status(500).json({
+      msg: 'Internal server error',
     });
   }
-
-  const result = await rpcsvc.register(url as string);
-
-  res.json({
-    id: result,
-  });
 };
 
 const update = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const newUrl = req.body.newTargetUrl;
-  const urlId = req.body.id;
+  try {
+    const newUrl = req.body.newTargetUrl;
+    const urlId = req.body.id;
 
-  if (typeof newUrl !== 'string' || typeof urlId !== 'string') {
-    res.status(400).json({
-      msg: 'Malformed request',
-    });
-  }
+    if (typeof newUrl !== 'string' || typeof urlId !== 'string') {
+      res.status(400).json({
+        msg: 'Malformed request',
+      });
+    }
 
-  const updated = await rpcsvc.update(newUrl as string, urlId as string);
+    const updated = await rpcsvc.update(newUrl as string, urlId as string);
 
-  if (!updated) {
-    res.status(400).json({
-      msg: 'Webhook ID not found',
-    });
-  } else {
-    res.status(200).json({
-      msg: 'Webhook updated',
+    if (!updated) {
+      res.status(400).json({
+        msg: 'Webhook ID not found',
+      });
+    } else {
+      res.status(200).json({
+        msg: 'Webhook updated',
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      msg: 'Internal server error',
     });
   }
 };
 
 const trigger = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
-  const { body } = req;
-  rpcsvc.trigger(body);
-  res.json({
-    msg: 'Webhooks triggered',
-  });
+  try {
+    const { body } = req;
+    rpcsvc.trigger(body);
+    res.json({
+      msg: 'Webhooks triggered',
+    });
+  } catch (err) {
+    res.status(500).json({
+      msg: 'Internal server error',
+    });
+  }
 };
 
 const registerHandlers = async (app: Express, JWT: authJWT, rpcsvc: RPCService) => {
