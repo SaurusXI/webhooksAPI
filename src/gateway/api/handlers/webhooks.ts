@@ -1,7 +1,10 @@
 /* eslint-disable import/extensions */
 import { Express, Request, Response } from 'express';
+import Joi from 'joi';
 import RPCService from '../../pkg/rpc/service';
 import { authJWT } from '../middleware/auth';
+
+const webhookSchema = Joi.object().required();
 
 const fetch = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
   try {
@@ -69,11 +72,21 @@ const update = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
 const trigger = (rpcsvc: RPCService) => async (req: Request, res: Response) => {
   try {
     const { body } = req;
+    await webhookSchema.validateAsync(body).catch(() => {
+      throw new Error('Invalid body');
+    });
     rpcsvc.trigger(body);
     res.json({
       msg: 'Webhooks triggered',
     });
-  } catch (err) {
+  } catch (err: any) {
+    rpcsvc.broker.logger.error(err);
+    if (err.message === 'Invalid body') {
+      res.status(400).json({
+        msg: 'Malformed request.',
+      });
+      return;
+    }
     res.status(500).json({
       msg: 'Internal server error',
     });
@@ -105,7 +118,7 @@ const registerHandlers = async (app: Express, JWT: authJWT, rpcsvc: RPCService) 
   app.patch('/webhook', JWT.authenticate(), update(rpcsvc));
   app.post('/webhook', JWT.authenticate(), register(rpcsvc));
   app.delete('/webhook', JWT.authenticate(), deleteById(rpcsvc));
-  app.get('/trigger', JWT.authenticate(), trigger(rpcsvc));
+  app.post('/trigger', JWT.authenticate(), trigger(rpcsvc));
 };
 
 export { registerHandlers as default };
