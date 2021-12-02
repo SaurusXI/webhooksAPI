@@ -1,6 +1,7 @@
 /* eslint-disable import/extensions */
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 import AuthService from '../pkg/auth/service';
 import RPCService from '../pkg/rpc/service';
@@ -17,6 +18,7 @@ const rpcsvc = new RPCService();
 // Load middleware
 const authJWT = authMiddleware(authsvc);
 app.use(express.json());
+app.use(cors());
 app.use(authJWT.initialize());
 
 // Register routes
